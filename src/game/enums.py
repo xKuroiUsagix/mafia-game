@@ -1,17 +1,17 @@
-from enum import Enum
+import enum
 
 
-class RoomType(str, Enum):
+class RoomType(str, enum.Enum):
     PUBLIC = 'public'
     PRIVATE = 'private'
 
 
-class RoolSetType(str, Enum):
+class RoolSetType(str, enum.Enum):
     CUSTOM = 'custom'
     PERMANENT = 'permanent'
 
 
-class ActionType(str, Enum):
+class ActionType(str, enum.Enum):
     NO_ACTION = 'no_action'
     KILL = 'kill'
     SAVE = 'save'

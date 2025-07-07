@@ -1,6 +1,6 @@
 from uuid import uuid4
 from sqlalchemy import (
-    String, ForeignKey, SmallInteger, CheckConstraint, UUID, UniqueConstraint, Enum
+    String, ForeignKey, SmallInteger, CheckConstraint, UUID, UniqueConstraint
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.models import TimestampModel, Base
@@ -20,8 +20,8 @@ class Room(TimestampModel):
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    creator: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    type_: Mapped[RoomType] = mapped_column(Enum(RoomType), nullable=False, default=RoomType.PUBLIC)
+    creator_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    type_: Mapped[RoomType] = mapped_column(String(32), nullable=False, default=RoomType.PUBLIC.value)
     rool_set_id: Mapped[int] = mapped_column(ForeignKey('rool_sets.id', ondelete='CASCADE'), nullable=False)
     join_code: Mapped[UUID] = mapped_column(UUID(as_uuid=True), nullable=False, default=uuid4, unique=True)
     password: Mapped[str] = mapped_column(nullable=True)
@@ -47,6 +47,9 @@ class RoolSet(Base):
 
     game_roles = relationship('GameRole', secondary='rool_sets_roles', back_populates='rool_sets', cascade='all, delete')
 
+    def __str__(self) -> str:
+        return self.name.capitalize()
+
 
 class UserRoom(TimestampModel):
     __tablename__ = 'users_rooms'
@@ -71,6 +74,9 @@ class GameRole(Base):
     rool_sets = relationship(
         'RoolSet', secondary='rool_sets_roles', back_populates='game_roles', cascade='all, delete'
     )
+
+    def __str__(self) -> str:
+        return self.name.capitalize()
 
 
 class RoolSetRole(Base):

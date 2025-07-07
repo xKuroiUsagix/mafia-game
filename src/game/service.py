@@ -10,6 +10,7 @@ from .constants import MAX_PLAYER_LIMIT
 
 
 class RoomService:
+
     @staticmethod
     async def create(
         room_data: RoomCreateRequest,
@@ -39,6 +40,7 @@ class RoomService:
 
         room = Room(
             type_=room_data.type_,
+            creator_id=user.id,
             rool_set_id=room_data.rool_set_id,
             join_code=uuid4(),
             password=get_password_hash(room_data.password),
