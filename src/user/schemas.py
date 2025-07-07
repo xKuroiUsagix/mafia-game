@@ -25,6 +25,7 @@ class UserResponse(BaseModel):
     id: int
     username: str
     email: str
+    role: str
 
 
 class Token(BaseModel):
@@ -34,6 +35,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
+    role: str | None = None
 
 
 class ProfileCreateRequest(BaseModel):
@@ -44,5 +46,3 @@ class ProfileResponse(BaseModel):
     id: int
     user_id: int
     description: str | None
-    created_at: datetime
-    updated_at: datetime

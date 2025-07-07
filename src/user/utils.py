@@ -55,12 +55,13 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)):
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = await get_token_data(token)
         username = payload.get('sub')
+        role = payload.get('role')
 
         if username is None:
             raise CredentialsException()
-        token_data = TokenData(username=username)
+        token_data = TokenData(username=username, role=role)
     except InvalidTokenError:
         raise CredentialsException()
     
@@ -71,3 +72,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
     
     logger.info(f'request accepted from user {token_data.username}')
     return user
+
+
+async def get_token_data(token: str) -> dict:
+    return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])

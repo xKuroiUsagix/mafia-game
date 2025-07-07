@@ -43,6 +43,7 @@ class UserService:
                 id=user.id,
                 username=user.username,
                 email=user.email,
+                role=user.role,
                 created_at=user.created_at,
                 updated_at=user.updated_at
             )
@@ -58,7 +59,11 @@ class UserService:
         
         access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
-            data={'sub': user.username}, expires_delta=access_token_expires
+            data={
+                'sub': user.username,
+                'role': user.role
+            },
+            expires_delta=access_token_expires
         )
         return Token(access_token=access_token, token_type='bearer')
     
@@ -71,7 +76,7 @@ class UserService:
         profile = result.scalar_one_or_none()
 
         if profile:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detai='ProfileExists')
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='ProfileExists')
 
         profile = Profile(
             user_id=user.id,
