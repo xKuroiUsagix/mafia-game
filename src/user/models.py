@@ -19,7 +19,8 @@ class User(TimestampModel):
     profile = relationship(
         'Profile', back_populates='user', uselist=False, cascade='all, delete'
     )
-    rooms = relationship('Room', back_populates='creator', cascade='all, delete')
+    owned_rooms = relationship('Room', back_populates='creator', cascade='all, delete')
+    rooms = relationship('Room', secondary='users_rooms', back_populates='users')
 
 
 class Profile(Base):

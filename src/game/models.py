@@ -29,6 +29,7 @@ class Room(TimestampModel):
 
     rool_set = relationship('RoolSet')
     creator = relationship('User', back_populates='rooms', uselist=False, cascade='all, delete')
+    users = relationship('User', secondary='users_rooms', back_populates='rooms')
 
 
 class RoolSet(Base):
@@ -41,7 +42,7 @@ class RoolSet(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(128), nullable=False, unique=True)
     mafia_percent: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=25)
-    allow_sherif: Mapped[bool] = mapped_column(nullable=False, default=True)
+    allow_sheriff: Mapped[bool] = mapped_column(nullable=False, default=True)
     day_duration_minutes: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=10)
     night_duration_minutes: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=5)
 

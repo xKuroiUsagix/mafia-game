@@ -1,5 +1,4 @@
-from datetime import datetime
-from pydantic import BaseModel, EmailStr, model_validator
+from pydantic import BaseModel, EmailStr, model_validator, ConfigDict
 
 
 class UserCreateRequest(BaseModel):
@@ -46,3 +45,10 @@ class ProfileResponse(BaseModel):
     id: int
     user_id: int
     description: str | None
+
+
+class UserInRoom(BaseModel):
+    id: int
+    username: str
+
+    model_config = ConfigDict(from_attributes=True)
